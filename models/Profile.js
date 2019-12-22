@@ -23,30 +23,30 @@ const ProfileSchema = new mongoose.Schema({
   bio: {
     type: String
   },
-  friends: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId
-        // ref: 'user'
-      }
-    }
-  ],
-  requestsSent: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId
-        // ref: 'user'
-      }
-    }
-  ],
-  requestsReceived: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId
-        // ref: 'user'
-      }
-    }
-  ],
+  // friends: [
+  //   {
+  //     user: {
+  //       type: mongoose.Schema.Types.ObjectId
+  //       // ref: 'user'
+  //     }
+  //   }
+  // ],
+  // requestsSent: [
+  //   {
+  //     user: {
+  //       type: mongoose.Schema.Types.ObjectId
+  //       // ref: 'user'
+  //     }
+  //   }
+  // ],
+  // requestsReceived: [
+  //   {
+  //     user: {
+  //       type: mongoose.Schema.Types.ObjectId
+  //       // ref: 'user'
+  //     }
+  //   }
+  // ],
   education: [
     {
       school: {

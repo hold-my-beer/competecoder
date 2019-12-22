@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const FriendshipSchema = new mongoose.Schema({
-  users: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: 'user'
-      }
-    }
-  ],
-  isConfirmed: {
+  initiator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  acceptor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  isAccepted: {
     type: Boolean,
-    default: false
+    default: null
   }
 });
 
