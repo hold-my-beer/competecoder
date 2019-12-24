@@ -5,6 +5,33 @@ const auth = require('../../middleware/auth');
 const Friendship = require('../../models/Friendship');
 const Profile = require('../../models/Profile');
 
+// @route   GET api/friends
+// @desc    Get user friend requests
+// @access  Private
+router.get('/', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      return res
+        .status(404)
+        .json({ msg: 'Profile not found. Create profile first' });
+    }
+
+    const friends = await Friendship.find({
+      $or: [{ initiator: req.user.id }, { acceptor: req.user.id }]
+    });
+
+    if (!friends) {
+      return res.status(404).json({ msg: 'No friend requests found' });
+    }
+
+    return res.json(friends);
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
 // @route   POST api/friends/:userId
 // @desc    Request to become friend of userId
 // @access  Private
