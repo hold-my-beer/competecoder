@@ -6,6 +6,7 @@ const request = require('request');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route   GET api/profile
 // @desc    Get all profiles
@@ -130,7 +131,7 @@ router.post(
 router.delete('/', auth, async (req, res) => {
   try {
     //Delete posts
-    /* */
+    await Post.findOneAndRemove({ user: req.user.id });
     //Delete profile if exists - if not, just goes further - no error fired
     await Profile.findOneAndRemove({ user: req.user.id });
     //Delete user
