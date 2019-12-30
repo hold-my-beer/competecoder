@@ -229,4 +229,86 @@ router.put('/unlike/:id', auth, async (req, res) => {
   }
 });
 
+// @route   POST api/posts/comments/:postId
+// @desc    Comment a post
+// @access  Private
+router.post(
+  '/comments/:postId',
+  [
+    auth,
+    check('text', 'Text is required')
+      .not()
+      .isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const post = await Post.findById(req.params.postId);
+      if (!post) {
+        return res.status(404).json({ msg: 'Post not found' });
+      }
+
+      const user = await User.findById(req.user.id).select('-password');
+
+      const { text } = req.body;
+      post.comments.unshift({
+        user: user.id,
+        avatar: user.avatar,
+        text
+      });
+      await post.save();
+      return res.json(post);
+    } catch (err) {
+      console.error(err.message);
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({ msg: 'Post not found' });
+      }
+
+      return res.status(500).json({ msg: 'Server Error' });
+    }
+  }
+);
+
+// @route   DELETE api/posts/comments/:postId/:id
+// @desc    Delete comment by id
+// @access  Private
+router.delete('/comments/:postId/:id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+
+    const removeIndex = post.comments
+      .map(comment => comment.id.toString())
+      .indexOf(req.params.id);
+    if (removeIndex === -1) {
+      return res.status(404).json({ msg: 'Comment not found' });
+    }
+
+    if (post.comments[removeIndex].user.toString() !== req.user.id) {
+      console.log(post.comments[removeIndex].user);
+      console.log(req.user.id);
+      return res
+        .status(400)
+        .json({ msg: 'Cannot delete a comment of another user' });
+    }
+
+    post.comments.splice(removeIndex, 1);
+    await post.save();
+    return res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+
+    return res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
 module.exports = router;
