@@ -6,9 +6,11 @@ const Landing = () => {
     <section className="landing">
       <div className="dark-overlay">
         <div className="landing-inner">
-          <h1>CompeteCoder</h1>
-          <h4>Diversify your coding experience.</h4>
-          <h4>Socialize with your competitors and find new friends.</h4>
+          <h1 className="large">CompeteCoder</h1>
+          <p className="lead">Diversify your coding experience.</p>
+          <p className="lead">
+            Socialize with your competitors and find new friends.
+          </p>
 
           <div className="buttons">
             <Link className="btn btn-primary" to="/login">
