@@ -8,6 +8,11 @@ import Routes from './components/routing/Routes';
 
 import './App.css';
 import { loadUser } from './actions/auth';
+import setAuthToken from './utils/setAuthToken';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
   useEffect(() => {

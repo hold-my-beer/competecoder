@@ -14,6 +14,7 @@ const User = require('../../models/User');
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
+    console.log(user);
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -28,10 +29,7 @@ router.post(
   '/',
   [
     check('email', 'Please include a valid email').isEmail(),
-    check(
-      'password',
-      'Please enter a password of minimum 6 characters'
-    ).isLength({ min: 6 })
+    check('password', 'Password is required').exists()
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -48,7 +46,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'User does not exist' }] });
+          .json({ errors: [{ msg: 'Invalid credentials' }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
