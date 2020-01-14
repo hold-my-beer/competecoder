@@ -347,7 +347,7 @@ router.get('/codeforces/:handle', (req, res) => {
         return res.status(404).json({ msg: 'No codeforces profile found' });
       }
 
-      return res.json(JSON.parse(body));
+      return res.json(JSON.parse(body).result[0]);
     });
   } catch (error) {
     console.error(err.message);

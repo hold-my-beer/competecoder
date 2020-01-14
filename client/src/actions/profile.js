@@ -5,7 +5,8 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
-  GET_PROFILES
+  GET_PROFILES,
+  GET_CODEFORCES
 } from './types';
 import { setAlert } from './alert';
 
@@ -28,6 +29,10 @@ export const getCurrentProfile = () => async dispatch => {
 
 //Get all profiles
 export const getProfiles = () => async dispatch => {
+  dispatch({
+    type: CLEAR_PROFILE
+  });
+
   try {
     const res = await axios.get('/api/profile');
 
@@ -168,5 +173,22 @@ export const deleteAccount = () => async dispatch => {
         payload: { msg: err.response.statusText, status: err.response.status }
       });
     }
+  }
+};
+
+//Get Codeforces Data
+export const getCodeforcesData = handle => async dispatch => {
+  try {
+    const res = await axios.get(`/api/profile/codeforces/${handle}`);
+
+    dispatch({
+      type: GET_CODEFORCES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
 };

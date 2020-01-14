@@ -6,6 +6,8 @@ import Spinner from '../layout/Spinner';
 import { getProfileById } from '../../actions/profile';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
+import ProfileEducation from './ProfileEducation';
+import ProfileCodeforces from './ProfileCodeforces';
 
 const Profile = ({
   getProfileById,
@@ -35,21 +37,6 @@ const Profile = ({
           <div class="profile-grid my-1">
             <ProfileTop profile={profile} />
             <ProfileAbout profile={profile} />
-            {/* <div className="profile-exp bg-white p-2">
-              <h2 className="text-primary">Experience</h2>
-              {profile.experience.length > 0 ? (
-                <Fragment>
-                  {profile.experience.map(experience => (
-                    <ProfileExperience
-                      key={experience._id}
-                      experience={experience}
-                    />
-                  ))}
-                </Fragment>
-              ) : (
-                <h4>No experience credentials</h4>
-              )}
-            </div>
 
             <div className="profile-edu bg-white p-2">
               <h2 className="text-primary">Education</h2>
@@ -67,9 +54,12 @@ const Profile = ({
               )}
             </div>
 
-            {profile.githubusername && (
-              <ProfileGithub username={profile.githubusername} />
-            )} */}
+            <div className="profile-github bg-white p-2">
+              <h2 className="text-primary">Codeforces Data</h2>
+              {profile.codeforcesHandle && (
+                <ProfileCodeforces handle={profile.codeforcesHandle} />
+              )}
+            </div>
           </div>
         </Fragment>
       )}

@@ -3,7 +3,8 @@ import {
   GET_PROFILES,
   PROFILE_ERROR,
   CLEAR_PROFILE,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  GET_CODEFORCES
 } from '../actions/types';
 
 const initialState = {
@@ -43,6 +44,12 @@ export default function(state = initialState, action) {
         ...state,
         profile: null,
         codeforces: {},
+        loading: false
+      };
+    case GET_CODEFORCES:
+      return {
+        ...state,
+        codeforces: payload,
         loading: false
       };
     default:
