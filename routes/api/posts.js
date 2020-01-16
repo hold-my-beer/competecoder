@@ -8,10 +8,10 @@ const User = require('../../models/User');
 
 // @route   GET api/posts
 // @desc    Get all posts
-// @access  Public
-router.get('/', async (req, res) => {
+// @access  Private
+router.get('/', auth, async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().sort({ date: -1 });
 
     if (!posts) {
       return res.status(404).json({ msg: 'Posts not found' });
@@ -65,15 +65,14 @@ router.post(
     try {
       const user = await User.findById(req.user.id).select('-password');
 
-      const { title, text } = req.body;
-      const post = new Post({
+      const newPost = new Post({
         user: user.id,
         avatar: user.avatar,
-        title: title,
-        text: text
+        name: user.name,
+        text: req.body.text
       });
 
-      await post.save();
+      const post = await newPost.save();
       return res.json(post);
     } catch (err) {
       console.error(err.message);
@@ -100,8 +99,6 @@ router.put(
     }
 
     try {
-      const { title, text } = req.body;
-
       const post = await Post.findById(req.params.id);
       if (!post) {
         return res.status(404).json({ msg: 'Post not found' });
@@ -113,11 +110,10 @@ router.put(
           .json({ msg: 'Cannot update a post of another user' });
       }
 
-      if (title) post.title = title;
       if (text) post.text = text;
 
-      await post.save();
-      return res.json(post);
+      const newPost = await post.save();
+      return res.json(newPost);
     } catch (err) {
       console.error(err.message);
       if (err.kind === 'ObjectId') {
@@ -181,8 +177,8 @@ router.put('/like/:id', auth, async (req, res) => {
       post.dislikes.splice(removeIndex, 1);
     }
 
-    await post.save();
-    return res.json(post);
+    const newPost = await post.save();
+    return res.json({ likes: newPost.likes, dislikes: newPost.dislikes });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
@@ -218,8 +214,8 @@ router.put('/unlike/:id', auth, async (req, res) => {
     } else {
       post.likes.splice(removeIndex, 1);
     }
-    await post.save();
-    return res.json(post);
+    const newPost = await post.save();
+    return res.json({ likes: newPost.likes, dislikes: newPost.dislikes });
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {

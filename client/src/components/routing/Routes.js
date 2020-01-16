@@ -10,6 +10,7 @@ import EditProfile from '../profile-forms/EditProfile';
 import AddEducation from '../profile-forms/AddEducation';
 import Profiles from '../profiles/Profiles';
 import Profile from '../profile/Profile';
+import Posts from '../posts/Posts';
 
 const Routes = () => {
   return (
@@ -24,6 +25,7 @@ const Routes = () => {
         <PrivateRoute exact path="/create-profile" component={CreateProfile} />
         <PrivateRoute exact path="/edit-profile" component={EditProfile} />
         <PrivateRoute exact path="/add-education" component={AddEducation} />
+        <Route exact path="/posts" component={Posts} />
       </Switch>
     </section>
   );

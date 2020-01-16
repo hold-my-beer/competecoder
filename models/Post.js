@@ -8,7 +8,7 @@ const PostSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  title: {
+  name: {
     type: String
   },
   text: {
