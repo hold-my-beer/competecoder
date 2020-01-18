@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { addLike, removeLike } from '../../actions/post';
+import { addLike, removeLike, deletePost } from '../../actions/post';
 
 const PostItem = ({
   addLike,
   removeLike,
+  deletePost,
+  auth,
   post: { _id, text, name, avatar, user, likes, dislikes, comments, date },
   showActions
 }) => {
@@ -49,7 +51,7 @@ const PostItem = ({
               {comments.length > 0 && (
                 <span class="comment-count">{comments.length}</span>
               )}
-            </Link>
+            </Link> */}
             {!auth.loading && user === auth.user._id && (
               <button
                 onClick={e => deletePost(_id)}
@@ -58,7 +60,7 @@ const PostItem = ({
               >
                 <i class="fas fa-times"></i>
               </button>
-            )} */}
+            )}
           </Fragment>
         )}
       </div>
@@ -73,11 +75,15 @@ PostItem.defaultProps = {
 PostItem.propTypes = {
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  deletePost: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  //   post: state.post
+  auth: state.auth
 });
 
-export default connect(null, { addLike, removeLike })(PostItem);
+export default connect(mapStateToProps, { addLike, removeLike, deletePost })(
+  PostItem
+);
