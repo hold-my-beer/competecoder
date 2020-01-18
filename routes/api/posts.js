@@ -254,10 +254,11 @@ router.post(
       post.comments.unshift({
         user: user.id,
         avatar: user.avatar,
+        name: user.name,
         text
       });
       await post.save();
-      return res.json(post);
+      return res.json(post.comments);
     } catch (err) {
       console.error(err.message);
       if (err.kind === 'ObjectId') {

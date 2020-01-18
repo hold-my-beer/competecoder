@@ -40,6 +40,9 @@ const PostSchema = new mongoose.Schema({
       avatar: {
         type: String
       },
+      name: {
+        type: String
+      },
       text: {
         type: String,
         required: true
