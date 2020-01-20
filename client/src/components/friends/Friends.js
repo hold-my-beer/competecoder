@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getRequests } from '../../actions/friend';
 import Spinner from '../layout/Spinner';
+import FriendItem from './FriendItem';
 
 const Friends = ({ getRequests, friend, auth }) => {
   useEffect(() => {
@@ -31,7 +32,7 @@ const Friends = ({ getRequests, friend, auth }) => {
 
   return (
     <Fragment>
-      {friend.loading ? (
+      {friend.loading || auth.loading ? (
         <Spinner />
       ) : (
         <Fragment>
@@ -44,7 +45,7 @@ const Friends = ({ getRequests, friend, auth }) => {
               <h2 className="text-primary">Requests waiting for your accept</h2>
               <div className="friends">
                 {incoming.map(request => (
-                  <p>Request</p>
+                  <FriendItem key={request._id} request={request} />
                 ))}
               </div>
             </Fragment>
@@ -54,7 +55,7 @@ const Friends = ({ getRequests, friend, auth }) => {
               <h2 className="text-primary">Your requests pending</h2>
               <div className="friends">
                 {outgoing.map(request => (
-                  <p>Request</p>
+                  <FriendItem key={request._id} request={request} />
                 ))}
               </div>
             </Fragment>
@@ -64,7 +65,7 @@ const Friends = ({ getRequests, friend, auth }) => {
               <h2 className="text-primary">Your friends</h2>
               <div className="friends">
                 {friends.requests.map(request => (
-                  <p>Request</p>
+                  <FriendItem key={request._id} request={request} />
                 ))}
               </div>
             </Fragment>

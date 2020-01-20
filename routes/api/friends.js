@@ -4,6 +4,7 @@ const auth = require('../../middleware/auth');
 
 const Friendship = require('../../models/Friendship');
 const Profile = require('../../models/Profile');
+const User = require('../../models/User');
 
 // @route   GET api/friends
 // @desc    Get user friend requests
@@ -67,9 +68,16 @@ router.post('/:userId', auth, async (req, res) => {
         .json({ msg: 'Cannot request for second friendship' });
     }
 
+    const userInitiator = await User.findById(req.user.id);
+    const userAcceptor = await User.findById(req.params.userId);
+
     friendship = new Friendship({
       initiator: req.user.id,
-      acceptor: req.params.userId
+      initiatorName: userInitiator.name,
+      initiatorAvatar: userInitiator.avatar,
+      acceptor: req.params.userId,
+      acceptorName: userAcceptor.name,
+      acceptorAvatar: userAcceptor.avatar
     });
 
     await friendship.save();
