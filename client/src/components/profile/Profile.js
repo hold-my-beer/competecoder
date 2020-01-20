@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { getProfileById } from '../../actions/profile';
+import { addFriendsRequest } from '../../actions/friend';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
 import ProfileEducation from './ProfileEducation';
@@ -11,6 +12,7 @@ import ProfileCodeforces from './ProfileCodeforces';
 
 const Profile = ({
   getProfileById,
+  addFriendsRequest,
   profile: { profile, loading },
   auth,
   match
@@ -34,7 +36,18 @@ const Profile = ({
                 Edit Profile
               </Link>
             )}
-          <div class="profile-grid my-1">
+          {auth.isAuthenticated &&
+            auth.loading === false &&
+            auth.user._id !== profile.user._id && (
+              <Link
+                to="#"
+                className="btn btn-white"
+                onClick={() => addFriendsRequest(profile.user._id)}
+              >
+                Make Friends
+              </Link>
+            )}
+          <div className="profile-grid my-1">
             <ProfileTop profile={profile} />
             <ProfileAbout profile={profile} />
 
@@ -69,6 +82,7 @@ const Profile = ({
 
 Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
+  addFriendsRequest: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -78,4 +92,6 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getProfileById })(Profile);
+export default connect(mapStateToProps, { getProfileById, addFriendsRequest })(
+  Profile
+);

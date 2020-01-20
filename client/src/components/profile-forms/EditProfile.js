@@ -44,7 +44,16 @@ const EditProfile = ({
       youtube: loading || !profile.social ? '' : profile.social.youtube,
       instagram: loading || !profile.social ? '' : profile.social.instagram
     });
-  }, [getCurrentProfile, loading]);
+  }, [
+    getCurrentProfile,
+    loading
+    // profile.country,
+    // profile.dateOfBirth,
+    // profile.skills,
+    // profile.codeforcesHandle,
+    // profile.bio,
+    // profile.social
+  ]);
 
   const {
     country,
