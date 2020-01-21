@@ -6,6 +6,7 @@ import Spinner from '../layout/Spinner';
 import { getProfileById } from '../../actions/profile';
 import { addFriendsRequest } from '../../actions/friend';
 import { getOutgoingRequestByAcceptorId } from '../../actions/friend';
+import { getIncomingRequestByInitiatorId } from '../../actions/friend';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
 import ProfileEducation from './ProfileEducation';
@@ -15,6 +16,7 @@ const Profile = ({
   getProfileById,
   addFriendsRequest,
   getOutgoingRequestByAcceptorId,
+  getIncomingRequestByInitiatorId,
   profile: { profile, loading },
   friend,
   auth,
@@ -23,7 +25,13 @@ const Profile = ({
   useEffect(() => {
     getProfileById(match.params.id);
     getOutgoingRequestByAcceptorId(match.params.id);
-  }, [getProfileById, getOutgoingRequestByAcceptorId, match.params.id]);
+    getIncomingRequestByInitiatorId(match.params.id);
+  }, [
+    getProfileById,
+    getOutgoingRequestByAcceptorId,
+    getIncomingRequestByInitiatorId,
+    match.params.id
+  ]);
   return (
     <Fragment>
       {profile === null || loading ? (
@@ -91,6 +99,7 @@ Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   addFriendsRequest: PropTypes.func.isRequired,
   getOutgoingRequestByAcceptorId: PropTypes.func.isRequired,
+  getIncomingRequestByInitiatorId: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   friend: PropTypes.object.isRequired
@@ -105,5 +114,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   getProfileById,
   addFriendsRequest,
-  getOutgoingRequestByAcceptorId
+  getOutgoingRequestByAcceptorId,
+  getIncomingRequestByInitiatorId
 })(Profile);
