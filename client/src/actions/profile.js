@@ -4,6 +4,7 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
+  CLEAR_REQUEST,
   ACCOUNT_DELETED,
   GET_PROFILES,
   GET_CODEFORCES
@@ -31,6 +32,10 @@ export const getCurrentProfile = () => async dispatch => {
 export const getProfiles = () => async dispatch => {
   dispatch({
     type: CLEAR_PROFILE
+  });
+
+  dispatch({
+    type: CLEAR_REQUEST
   });
 
   try {

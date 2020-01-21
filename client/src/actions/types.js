@@ -25,3 +25,6 @@ export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const ADD_REQUEST = 'ADD_REQUEST';
 export const FRIEND_ERROR = 'FRIEND_ERROR';
 export const GET_REQUESTS = 'GET_REQUESTS';
+export const GET_REQUEST = 'GET_REQUEST';
+export const CLEAR_REQUEST = 'CLEAR_REQUEST';
+export const ACCEPT_REQUEST = 'ACCEPT_REQUEST';

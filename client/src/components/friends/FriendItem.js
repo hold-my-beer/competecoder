@@ -35,22 +35,9 @@ const FriendItem = ({
 
       <div>
         {isAccepted === null && acceptor === auth.user._id && (
-          <Fragment>
-            <button
-              //onClick={e => addLike(_id)}
-              type="button"
-              className="btn btn-success"
-            >
-              <i class="fas fa-check"></i> Accept
-            </button>
-            <button
-              //onClick={e => addLike(_id)}
-              type="button"
-              className="btn btn-danger"
-            >
-              <i class="fas fa-times"></i> Decline
-            </button>
-          </Fragment>
+          <Link to={`/profile/${initiator}`} className="btn btn-primary">
+            Go To Developer
+          </Link>
         )}
         {isAccepted === null && initiator === auth.user._id && (
           <p className="lead">
