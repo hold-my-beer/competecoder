@@ -3,7 +3,8 @@ import {
   FRIEND_ERROR,
   GET_REQUESTS,
   GET_REQUEST,
-  CLEAR_REQUEST
+  CLEAR_REQUEST,
+  ACCEPT_REQUEST
 } from '../actions/types';
 
 const initialState = {
@@ -18,7 +19,11 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case ADD_REQUEST:
-      return state;
+      return {
+        ...state,
+        request: payload,
+        loading: false
+      };
     case GET_REQUESTS:
       return {
         ...state,
@@ -29,6 +34,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         request: payload,
+        loading: false
+      };
+    case ACCEPT_REQUEST:
+      return {
+        ...state,
+        requests: state.requests.map(request =>
+          request._id === payload.id
+            ? { ...request, isAccepted: true }
+            : request
+        ),
         loading: false
       };
     case CLEAR_REQUEST:

@@ -7,12 +7,14 @@ import {
   CLEAR_REQUEST,
   ACCOUNT_DELETED,
   GET_PROFILES,
-  GET_CODEFORCES
+  GET_CODEFORCES,
+  SET_PROFILE_LOADING
 } from './types';
 import { setAlert } from './alert';
 
 //Get current users profile
 export const getCurrentProfile = () => async dispatch => {
+  dispatch(setProfileLoading());
   try {
     const res = await axios.get('/api/profile/me');
 
@@ -38,6 +40,8 @@ export const getProfiles = () => async dispatch => {
     type: CLEAR_REQUEST
   });
 
+  dispatch(setProfileLoading());
+
   try {
     const res = await axios.get('/api/profile');
 
@@ -55,6 +59,8 @@ export const getProfiles = () => async dispatch => {
 
 //Get profile by ID
 export const getProfileById = userId => async dispatch => {
+  dispatch(setProfileLoading());
+
   try {
     const res = await axios.get(`/api/profile/${userId}`);
 
@@ -183,6 +189,7 @@ export const deleteAccount = () => async dispatch => {
 
 //Get Codeforces Data
 export const getCodeforcesData = handle => async dispatch => {
+  dispatch(setProfileLoading());
   try {
     const res = await axios.get(`/api/profile/codeforces/${handle}`);
 
@@ -196,4 +203,11 @@ export const getCodeforcesData = handle => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
+};
+
+//Set profile loading
+export const setProfileLoading = () => dispatch => {
+  dispatch({
+    type: SET_PROFILE_LOADING
+  });
 };

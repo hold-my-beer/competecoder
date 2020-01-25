@@ -64,7 +64,7 @@ const Friends = ({ getRequests, friend, auth }) => {
             <Fragment>
               <h2 className="text-primary">Your friends</h2>
               <div className="friends">
-                {friends.requests.map(request => (
+                {friends.map(request => (
                   <FriendItem key={request._id} request={request} />
                 ))}
               </div>

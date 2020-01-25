@@ -33,10 +33,10 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// @route   GET api/friends/incoming/:initiatorId
-// @desc    Get incoming request by initiatorId
+// @route   GET api/friends/:userId
+// @desc    Get request by userId
 // @access  Private
-router.get('/incoming/:initiatorId', auth, async (req, res) => {
+router.get('/:userId', auth, async (req, res) => {
   try {
     let profile = await Profile.findOne({ user: req.user.id });
     if (!profile) {
@@ -45,7 +45,7 @@ router.get('/incoming/:initiatorId', auth, async (req, res) => {
         .json({ msg: 'Profile not found. Create profile first' });
     }
 
-    profile = await Profile.findOne({ user: req.params.initiatorId });
+    profile = await Profile.findOne({ user: req.params.userId });
 
     if (!profile) {
       return res
@@ -54,7 +54,10 @@ router.get('/incoming/:initiatorId', auth, async (req, res) => {
     }
 
     const friend = await Friendship.findOne({
-      $and: [{ initiator: req.params.initiatorId }, { acceptor: req.user.id }]
+      $or: [
+        { $and: [{ initiator: req.user.id }, { acceptor: req.params.userId }] },
+        { $and: [{ initiator: req.params.userId }, { acceptor: req.user.id }] }
+      ]
     });
 
     if (!friend) {
@@ -67,41 +70,76 @@ router.get('/incoming/:initiatorId', auth, async (req, res) => {
     return res.status(500).json({ msg: 'Server Error' });
   }
 });
+
+// @route   GET api/friends/incoming/:initiatorId
+// @desc    Get incoming request by initiatorId
+// @access  Private
+// router.get('/incoming/:initiatorId', auth, async (req, res) => {
+//   try {
+//     let profile = await Profile.findOne({ user: req.user.id });
+//     if (!profile) {
+//       return res
+//         .status(404)
+//         .json({ msg: 'Profile not found. Create profile first' });
+//     }
+
+//     profile = await Profile.findOne({ user: req.params.initiatorId });
+
+//     if (!profile) {
+//       return res
+//         .status(404)
+//         .json({ msg: 'Profile not found. User you requested has no profile' });
+//     }
+
+//     const friend = await Friendship.findOne({
+//       $and: [{ initiator: req.params.initiatorId }, { acceptor: req.user.id }]
+//     });
+
+//     if (!friend) {
+//       return res.status(404).json({ msg: 'No friend request found' });
+//     }
+
+//     return res.json(friend);
+//   } catch (err) {
+//     console.error(err.message);
+//     return res.status(500).json({ msg: 'Server Error' });
+//   }
+// });
 
 // @route   GET api/friends/outgoing/:acceptorId
 // @desc    Get outgoing friend request by acceptorId
 // @access  Private
-router.get('/outgoing/:acceptorId', auth, async (req, res) => {
-  try {
-    let profile = await Profile.findOne({ user: req.user.id });
-    if (!profile) {
-      return res
-        .status(404)
-        .json({ msg: 'Profile not found. Create profile first' });
-    }
+// router.get('/outgoing/:acceptorId', auth, async (req, res) => {
+//   try {
+//     let profile = await Profile.findOne({ user: req.user.id });
+//     if (!profile) {
+//       return res
+//         .status(404)
+//         .json({ msg: 'Profile not found. Create profile first' });
+//     }
 
-    profile = await Profile.findOne({ user: req.params.acceptorId });
+//     profile = await Profile.findOne({ user: req.params.acceptorId });
 
-    if (!profile) {
-      return res
-        .status(404)
-        .json({ msg: 'Profile not found. User you requested has no profile' });
-    }
+//     if (!profile) {
+//       return res
+//         .status(404)
+//         .json({ msg: 'Profile not found. User you requested has no profile' });
+//     }
 
-    const friend = await Friendship.findOne({
-      $and: [{ initiator: req.user.id }, { acceptor: req.params.acceptorId }]
-    });
+//     const friend = await Friendship.findOne({
+//       $and: [{ initiator: req.user.id }, { acceptor: req.params.acceptorId }]
+//     });
 
-    if (!friend) {
-      return res.status(404).json({ msg: 'No friend request found' });
-    }
+//     if (!friend) {
+//       return res.status(404).json({ msg: 'No friend request found' });
+//     }
 
-    return res.json(friend);
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).json({ msg: 'Server Error' });
-  }
-});
+//     return res.json(friend);
+//   } catch (err) {
+//     console.error(err.message);
+//     return res.status(500).json({ msg: 'Server Error' });
+//   }
+// });
 
 // @route   POST api/friends/:userId
 // @desc    Request to become friend of userId

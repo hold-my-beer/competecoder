@@ -2,9 +2,12 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { acceptRequest } from '../../actions/friend';
 
 const FriendItem = ({
+  acceptRequest,
   request: {
+    _id,
     isAccepted,
     initiator,
     initiatorName,
@@ -35,9 +38,21 @@ const FriendItem = ({
 
       <div>
         {isAccepted === null && acceptor === auth.user._id && (
-          <Link to={`/profile/${initiator}`} className="btn btn-primary">
-            Go To Developer
-          </Link>
+          <Fragment>
+            <Link to={`/profile/${initiator}`} className="btn btn-primary">
+              Go To Developer
+            </Link>
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => acceptRequest(_id)}
+            >
+              <i class="fas fa-check"></i> Accept
+            </button>
+            <button type="button" className="btn btn-danger" onClick={() => {}}>
+              <i class="fas fa-times"></i> Decline
+            </button>
+          </Fragment>
         )}
         {isAccepted === null && initiator === auth.user._id && (
           <p className="lead">
@@ -60,6 +75,7 @@ const FriendItem = ({
 };
 
 FriendItem.propTypes = {
+  acceptRequest: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
@@ -67,4 +83,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(FriendItem);
+export default connect(mapStateToProps, { acceptRequest })(FriendItem);
