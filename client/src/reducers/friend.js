@@ -4,13 +4,15 @@ import {
   GET_REQUESTS,
   GET_REQUEST,
   CLEAR_REQUEST,
-  ACCEPT_REQUEST
+  ACCEPT_REQUEST,
+  DECLINE_REQUEST,
+  SET_FRIEND_LOADING
 } from '../actions/types';
 
 const initialState = {
   request: null,
   requests: [],
-  loading: true,
+  loading: false,
   error: {}
 };
 
@@ -46,6 +48,16 @@ export default function(state = initialState, action) {
         ),
         loading: false
       };
+    case DECLINE_REQUEST:
+      return {
+        ...state,
+        requests: state.requests.map(request =>
+          request._id === payload.id
+            ? { ...request, isAccepted: false }
+            : request
+        ),
+        loading: false
+      };
     case CLEAR_REQUEST:
       return {
         ...state,
@@ -57,6 +69,11 @@ export default function(state = initialState, action) {
         ...state,
         loading: false,
         error: payload
+      };
+    case SET_FRIEND_LOADING:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;

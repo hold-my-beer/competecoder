@@ -5,6 +5,7 @@ const auth = require('../../middleware/auth');
 const Friendship = require('../../models/Friendship');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 // @route   GET api/friends
 // @desc    Get user friend requests
@@ -25,6 +26,60 @@ router.get('/', auth, async (req, res) => {
     if (!friends) {
       return res.status(404).json({ msg: 'No friend requests found' });
     }
+
+    // friends.forEach(async friendship => {
+    //   const friendId =
+    //     req.user.id === friendship.acceptor
+    //       ? friendship.initiator
+    //       : friendship.acceptor;
+
+    //   const checkDate =
+    //     req.user.id === friendship.acceptor
+    //       ? friendship.initiatorNewsCheckData
+    //       : friendship.acceptorNewsCheckData;
+
+    //   //Find new posts
+    //   const posts = await Post.find({ user: friendId });
+    //   const newPosts = [];
+    //   posts.forEach(post => {
+    //     if (new Date(post.date).getTime() > checkDate.getTime()) {
+    //       newPosts.push(post);
+    //     }
+    //   });
+
+    //   //Find new commented posts
+    //   const commentedPosts = await Post.find({ 'comments.user': friendId });
+    //   const newCommentedPosts = [];
+    //   commentedPosts.forEach(post => {
+    //     post.comments.forEach(comment => {
+    //       if (new Date(comment.date).getTime() > checkDate.getTime()) {
+    //         newCommentedPosts.push(post);
+    //       }
+    //     });
+    //   });
+
+    //   //Find new liked posts
+    //   const likedPosts = await Post.find({ 'likes.user': friendId });
+    //   const newLikedPosts = [];
+    //   likedPosts.forEach(post => {
+    //     post.likes.forEach(like => {
+    //       if (new Date(like.date).getTime() > checkDate.getTime()) {
+    //         newLikedPosts.push(post);
+    //       }
+    //     });
+    //   });
+
+    //   //Populate friend posts
+    //   if (req.user.id === friendship.acceptor) {
+    //     friendship.initiatorNewPosts = newPosts;
+    //     friendship.initiatorNewCommentedPosts = newCommentedPosts;
+    //     friendship.initiatorNewLikedPosts = newLikedPosts;
+    //   } else {
+    //     friendship.acceptorNewPosts = newPosts;
+    //     friendship.acceptorNewCommentedPosts = newCommentedPosts;
+    //     friendship.acceptorNewLikedPosts = newLikedPosts;
+    //   }
+    // });
 
     return res.json(friends);
   } catch (err) {
@@ -63,6 +118,8 @@ router.get('/:userId', auth, async (req, res) => {
     if (!friend) {
       return res.status(404).json({ msg: 'No friend request found' });
     }
+
+    // console.log(friend);
 
     return res.json(friend);
   } catch (err) {

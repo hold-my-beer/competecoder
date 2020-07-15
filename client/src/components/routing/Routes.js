@@ -13,6 +13,7 @@ import Profile from '../profile/Profile';
 import Posts from '../posts/Posts';
 import Post from '../post/Post';
 import Friends from '../friends/Friends';
+import Friend from '../friend/Friend';
 
 const Routes = () => {
   return (
@@ -30,6 +31,7 @@ const Routes = () => {
         <PrivateRoute exact path="/posts" component={Posts} />
         <PrivateRoute exact path="/posts/:id" component={Post} />
         <PrivateRoute exact path="/friends" component={Friends} />
+        <PrivateRoute exact path="/friends/:userId" component={Friend} />
       </Switch>
     </section>
   );

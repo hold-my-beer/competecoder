@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator');
 
 const Post = require('../../models/Post');
 const User = require('../../models/User');
+const Friendship = require('../../models/Friendship');
 
 // @route   GET api/posts
 // @desc    Get all posts
@@ -25,7 +26,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // @route   GET api/posts/:id
-// @desc    Get posts by id
+// @desc    Get post by id
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
   try {
@@ -304,6 +305,92 @@ router.delete('/comments/:postId/:id', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Post not found' });
     }
 
+    return res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// @route   GET api/posts/created/:requestId
+// @desc    Get posts created by the user by requestId
+// @access  Private
+// router.get('/created/:requestId', auth, async (req, res) => {
+//   try {
+//     const request = await Friendship.findById(req.params.requestId);
+//     if (!request) {
+//       return res.status(404).json({ msg: 'No such friend found' });
+//     }
+
+//     const friendId =
+//       request.initiator === req.user.id ? request.acceptor : request.initiator;
+//     const checkDate =
+//       request.initiator === req.user.id
+//         ? acceptorPostsCheckDate
+//         : initiatorPostsCheckDate;
+
+//     const posts = await Post.find({ user: friendId });
+
+//     const newPosts = posts.filter(post => post.date > checkDate);
+
+//     return res.json(newPosts);
+//   } catch (err) {
+//     console.error(err.message);
+//     if (err.kind === 'ObjectId') {
+//       return res.status(404).json({ msg: 'User not found' });
+//     }
+//     return res.status(500).json({ msg: 'Server Error' });
+//   }
+// });
+
+// @route   GET api/posts/newposts/:userId
+// @desc    Get new posts by userId
+// @access  Private
+router.get('/newposts/:userId', auth, async (req, res) => {
+  try {
+    const request = await Friendship.findOne({
+      $or: [
+        { $and: [{ initiator: req.user.id }, { acceptor: req.params.userId }] },
+        { $and: [{ initiator: req.params.userId }, { acceptor: req.user.id }] }
+      ]
+    });
+
+    if (!request) {
+      return res.status(404).json({ msg: 'Request not found' });
+    }
+
+    const checkDate =
+      request.initiator === req.user.id
+        ? new Date(request.initiatorCheckDate)
+        : new Date(request.acceptorCheckDate);
+
+    const posts = await Post.find({
+      $or: [
+        { $and: [{ user: req.params.userId }, { date: { $gt: checkDate } }] },
+        {
+          $and: [
+            { 'comments.user': req.params.userId },
+            { 'comments.date': { $gt: checkDate } }
+          ]
+        },
+        {
+          $and: [
+            { 'likes.user': req.params.userId },
+            { 'likes.date': { $gt: checkDate } }
+          ]
+        }
+      ]
+    }).sort({ date: -1 });
+
+    if (!posts) {
+      return status(404).json({ msg: 'Posts not found' });
+    }
+
+    // console.log(posts);
+
+    return res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'User not found' });
+    }
     return res.status(500).json({ msg: 'Server Error' });
   }
 });

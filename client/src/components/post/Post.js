@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import PostItem from '../posts/PostItem';
@@ -8,7 +8,7 @@ import CommentItem from '../post/CommentItem';
 import { connect } from 'react-redux';
 import { getPostById } from '../../actions/post';
 
-const Post = ({ getPostById, post: { post, loading }, match }) => {
+const Post = ({ getPostById, post: { post, loading }, match, history }) => {
   useEffect(() => {
     getPostById(match.params.id);
   }, [getPostById, match.params.id]);
@@ -17,9 +17,12 @@ const Post = ({ getPostById, post: { post, loading }, match }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <Link to="/posts" className="btn">
+      {/* <Link to="/posts" className="btn">
         Back to Posts
-      </Link>
+      </Link> */}
+      <button onClick={history.goBack} className="btn">
+        Go Back
+      </button>
       <PostItem post={post} showActions={false} />
       <CommentForm postId={post._id} />
       <div className="comments">
@@ -40,4 +43,4 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(mapStateToProps, { getPostById })(Post);
+export default connect(mapStateToProps, { getPostById })(withRouter(Post));

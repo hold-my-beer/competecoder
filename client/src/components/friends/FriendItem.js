@@ -2,10 +2,11 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { acceptRequest } from '../../actions/friend';
+import { acceptRequest, declineRequest } from '../../actions/friend';
 
 const FriendItem = ({
   acceptRequest,
+  declineRequest,
   request: {
     _id,
     isAccepted,
@@ -19,53 +20,52 @@ const FriendItem = ({
   auth
 }) => {
   return (
-    <div className="post bg-white p-1 my-1">
+    <div className="friend bg-white p-1 m-1">
       {!auth.loading && initiator === auth.user._id ? (
-        <div>
+        <div className="friend-top">
           <Link to={`/profile/${acceptor}`}>
             <img className="round-img" src={acceptorAvatar} alt="" />
-            <h4>{acceptorName}</h4>
+            <h3>{acceptorName}</h3>
           </Link>
         </div>
       ) : (
-        <div>
+        <div className="friend-top">
           <Link to={`/profile/${initiator}`}>
             <img className="round-img" src={initiatorAvatar} alt="" />
-            <h4>{initiatorName}</h4>
+            <h3>{initiatorName}</h3>
           </Link>
         </div>
       )}
 
-      <div>
+      <div className="friend-content">
         {isAccepted === null && acceptor === auth.user._id && (
           <Fragment>
-            <Link to={`/profile/${initiator}`} className="btn btn-primary">
-              Go To Developer
-            </Link>
             <button
               type="button"
-              className="btn btn-success"
+              className="btn btn-stack btn-success my"
               onClick={() => acceptRequest(_id)}
             >
               <i class="fas fa-check"></i> Accept
             </button>
-            <button type="button" className="btn btn-danger" onClick={() => {}}>
+            <button
+              type="button"
+              className="btn btn-stack btn-danger"
+              onClick={() => declineRequest(_id)}
+            >
               <i class="fas fa-times"></i> Decline
             </button>
           </Fragment>
         )}
         {isAccepted === null && initiator === auth.user._id && (
-          <p className="lead">
-            Your request has yet to be confirmed by the acceptor
-          </p>
+          <h4>Your request has yet to be confirmed by the acceptor</h4>
         )}
         {isAccepted && !auth.loading && initiator === auth.user._id && (
-          <Link to={`/friends/${acceptor}`} className="btn btn-primary">
+          <Link to={`/friends/${acceptor}`} className="btn btn-primary my">
             Friend News
           </Link>
         )}
         {isAccepted && !auth.loading && acceptor === auth.user._id && (
-          <Link to={`/friends/${initiator}`} className="btn btn-primary">
+          <Link to={`/friends/${initiator}`} className="btn btn-primary my">
             Friend News
           </Link>
         )}
@@ -76,6 +76,7 @@ const FriendItem = ({
 
 FriendItem.propTypes = {
   acceptRequest: PropTypes.func.isRequired,
+  declineRequest: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
@@ -83,4 +84,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { acceptRequest })(FriendItem);
+export default connect(mapStateToProps, {
+  acceptRequest,
+  declineRequest
+})(FriendItem);

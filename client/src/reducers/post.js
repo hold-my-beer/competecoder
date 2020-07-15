@@ -6,13 +6,17 @@ import {
   ADD_POST,
   DELETE_POST,
   ADD_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  // GET_FRIEND_POSTS,
+  SET_POST_LOADING
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   post: null,
-  loading: true,
+  // comments: [],
+  // likes: [],
+  loading: false,
   error: {}
 };
 
@@ -76,6 +80,17 @@ export default function(state = initialState, action) {
             : post
         ),
         loading: false
+      };
+    // case GET_FRIEND_POSTS:
+    //   return {
+    //     ...state,
+    //     posts: payload,
+    //     loading: false
+    //   };
+    case SET_POST_LOADING:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;

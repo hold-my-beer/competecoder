@@ -4,7 +4,7 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   CLEAR_PROFILE,
-  CLEAR_REQUEST,
+  // CLEAR_REQUEST,
   ACCOUNT_DELETED,
   GET_PROFILES,
   GET_CODEFORCES,
@@ -15,6 +15,7 @@ import { setAlert } from './alert';
 //Get current users profile
 export const getCurrentProfile = () => async dispatch => {
   dispatch(setProfileLoading());
+
   try {
     const res = await axios.get('/api/profile/me');
 
@@ -36,9 +37,9 @@ export const getProfiles = () => async dispatch => {
     type: CLEAR_PROFILE
   });
 
-  dispatch({
-    type: CLEAR_REQUEST
-  });
+  // dispatch({
+  //   type: CLEAR_REQUEST
+  // });
 
   dispatch(setProfileLoading());
 
@@ -59,6 +60,10 @@ export const getProfiles = () => async dispatch => {
 
 //Get profile by ID
 export const getProfileById = userId => async dispatch => {
+  dispatch({
+    type: CLEAR_PROFILE
+  });
+
   dispatch(setProfileLoading());
 
   try {
@@ -189,7 +194,8 @@ export const deleteAccount = () => async dispatch => {
 
 //Get Codeforces Data
 export const getCodeforcesData = handle => async dispatch => {
-  dispatch(setProfileLoading());
+  // dispatch(setProfileLoading());
+
   try {
     const res = await axios.get(`/api/profile/codeforces/${handle}`);
 

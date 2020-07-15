@@ -37,37 +37,47 @@ const Friends = ({ getRequests, friend, auth }) => {
       ) : (
         <Fragment>
           <h1 className="large text-primary">Friends</h1>
-          <p className="lead">
-            <i className="fas fa-users"></i> Welcome to your clan
-          </p>
-          {incoming.length > 0 && (
+          {incoming.length > 0 || outgoing.length > 0 || friends.length > 0 ? (
             <Fragment>
-              <h2 className="text-primary">Requests waiting for your accept</h2>
-              <div className="friends">
-                {incoming.map(request => (
-                  <FriendItem key={request._id} request={request} />
-                ))}
-              </div>
+              <p className="lead">
+                <i className="fas fa-users"></i> Welcome to your clan
+              </p>
+              {incoming.length > 0 && (
+                <Fragment>
+                  <h2 className="text-primary">
+                    Requests waiting for your accept
+                  </h2>
+                  <div className="friends">
+                    {incoming.map(request => (
+                      <FriendItem key={request._id} request={request} />
+                    ))}
+                  </div>
+                </Fragment>
+              )}
+              {outgoing.length > 0 && (
+                <Fragment>
+                  <h2 className="text-primary">Your requests pending</h2>
+                  <div className="friends">
+                    {outgoing.map(request => (
+                      <FriendItem key={request._id} request={request} />
+                    ))}
+                  </div>
+                </Fragment>
+              )}
+              {friends.length > 0 && (
+                <Fragment>
+                  <h2 className="text-primary">Your friends</h2>
+                  <div className="friends">
+                    {friends.map(request => (
+                      <FriendItem key={request._id} request={request} />
+                    ))}
+                  </div>
+                </Fragment>
+              )}
             </Fragment>
-          )}
-          {outgoing.length > 0 && (
+          ) : (
             <Fragment>
-              <h2 className="text-primary">Your requests pending</h2>
-              <div className="friends">
-                {outgoing.map(request => (
-                  <FriendItem key={request._id} request={request} />
-                ))}
-              </div>
-            </Fragment>
-          )}
-          {friends.length > 0 && (
-            <Fragment>
-              <h2 className="text-primary">Your friends</h2>
-              <div className="friends">
-                {friends.map(request => (
-                  <FriendItem key={request._id} request={request} />
-                ))}
-              </div>
+              <p className="lead">You have no active friend requests</p>
             </Fragment>
           )}
         </Fragment>

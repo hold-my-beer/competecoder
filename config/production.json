@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://sergei123:sergei123@competecoder-zpsty.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "verysecrettoken"
+}

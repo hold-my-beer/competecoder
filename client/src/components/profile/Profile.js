@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { getProfileById } from '../../actions/profile';
-import { addFriendsRequest } from '../../actions/friend';
+import { addFriendsRequest, getRequestByUserId } from '../../actions/friend';
 // import { getOutgoingRequestByAcceptorId } from '../../actions/friend';
 // import { getIncomingRequestByInitiatorId } from '../../actions/friend';
-import { getRequestByUserId } from '../../actions/friend';
 import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
 import ProfileEducation from './ProfileEducation';
@@ -91,7 +90,7 @@ const Profile = ({
               )}
             </div>
 
-            <div className="profile-github bg-white p-2">
+            <div className="profile-codeforces bg-white p-2">
               <h2 className="text-primary">Codeforces Data</h2>
               {profile.codeforcesHandle && (
                 <ProfileCodeforces handle={profile.codeforcesHandle} />

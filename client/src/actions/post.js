@@ -8,11 +8,15 @@ import {
   ADD_POST,
   DELETE_POST,
   ADD_COMMENT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  // GET_FRIEND_POSTS,
+  SET_POST_LOADING
 } from './types';
 
 //Get posts
 export const getPosts = () => async dispatch => {
+  dispatch(setPostLoading());
+
   try {
     const res = await axios.get('/api/posts');
 
@@ -30,6 +34,8 @@ export const getPosts = () => async dispatch => {
 
 //Get post by id
 export const getPostById = id => async dispatch => {
+  dispatch(setPostLoading());
+
   try {
     const res = await axios.get(`/api/posts/${id}`);
 
@@ -169,4 +175,49 @@ export const deleteComment = (postId, commentId) => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
+};
+
+//Get friend posts by request id
+// export const getFriendNewPosts = requestId => async dispatch => {
+//   dispatch(setPostLoading());
+
+//   try {
+//     const res = await axios.get(`/api/posts/created/${requestId}`);
+
+//     dispatch({
+//       type: GET_FRIEND_POSTS,
+//       payload: res.data
+//     });
+//   } catch (err) {
+//     dispatch({
+//       type: POST_ERROR,
+//       payload: { msg: err.response.statusText, status: err.response.status }
+//     });
+//   }
+// };
+
+//Get new posts by userId
+export const getNewPostsByUserId = userId => async dispatch => {
+  dispatch(setPostLoading());
+
+  try {
+    const res = await axios.get(`/api/posts/newposts/${userId}`);
+
+    dispatch({
+      type: GET_POSTS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+//Set post loading
+export const setPostLoading = () => dispatch => {
+  dispatch({
+    type: SET_POST_LOADING
+  });
 };

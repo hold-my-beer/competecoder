@@ -4,14 +4,15 @@ import {
   PROFILE_ERROR,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
-  GET_CODEFORCES
+  GET_CODEFORCES,
+  SET_PROFILE_LOADING
 } from '../actions/types';
 
 const initialState = {
   profile: null,
   profiles: [],
   codeforces: {},
-  loading: true,
+  loading: false,
   error: {}
 };
 
@@ -51,6 +52,11 @@ export default function(state = initialState, action) {
         ...state,
         codeforces: payload,
         loading: false
+      };
+    case SET_PROFILE_LOADING:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;
